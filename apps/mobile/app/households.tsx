@@ -2,10 +2,8 @@ import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
 import { Link, router } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
 import { StatusBar } from "expo-status-bar";
-
-// Note: In a real setup, you'd use:
-// import { useQuery } from "convex/react";
-// import { api } from "@spoonful/convex/convex/_generated/api";
+import { useQuery } from "convex/react";
+import { api } from "@spoonful/convex/convex/_generated/api";
 
 const colors = {
 	cream: "#faf8f5",
@@ -22,9 +20,7 @@ const colors = {
 
 export default function HouseholdsScreen() {
 	const { signOut } = useAuth();
-
-	// In a real app, this would use useQuery to fetch households
-	// const households = useQuery(api.households.list);
+	const households = useQuery(api.households.list);
 
 	return (
 		<View style={styles.container}>
@@ -38,12 +34,30 @@ export default function HouseholdsScreen() {
 			</View>
 
 			<ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
-				<View style={styles.emptyCard}>
-					<Text style={styles.emptyTitle}>No households yet</Text>
-					<Text style={styles.emptyText}>
-						Create a new household or join one with an invite code to get started.
-					</Text>
-				</View>
+				{households === undefined ? (
+					<View style={styles.emptyCard}>
+						<Text style={styles.emptyText}>Loading...</Text>
+					</View>
+				) : households.length === 0 ? (
+					<View style={styles.emptyCard}>
+						<Text style={styles.emptyTitle}>No households yet</Text>
+						<Text style={styles.emptyText}>
+							Create a new household or join one with an invite code to get started.
+						</Text>
+					</View>
+				) : (
+					<View style={styles.householdList}>
+						{households.map((household) => (
+							<View key={household._id} style={styles.householdCard}>
+								<Text style={styles.householdName}>{household.name}</Text>
+								<Text style={styles.householdMeta}>
+									{household.memberCount} member{household.memberCount !== 1 ? "s" : ""}
+									{household.role === "admin" && " • Admin"}
+								</Text>
+							</View>
+						))}
+					</View>
+				)}
 
 				<View style={styles.actions}>
 					<Pressable style={styles.primaryButton}>
@@ -114,6 +128,29 @@ const styles = StyleSheet.create({
 		color: colors.textMuted,
 		textAlign: "center",
 		lineHeight: 22,
+	},
+	householdList: {
+		gap: 12,
+	},
+	householdCard: {
+		backgroundColor: "white",
+		borderRadius: 16,
+		padding: 20,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.04,
+		shadowRadius: 8,
+		elevation: 2,
+	},
+	householdName: {
+		fontSize: 18,
+		fontWeight: "600",
+		color: colors.text,
+		marginBottom: 4,
+	},
+	householdMeta: {
+		fontSize: 14,
+		color: colors.textMuted,
 	},
 	actions: {
 		marginTop: 24,

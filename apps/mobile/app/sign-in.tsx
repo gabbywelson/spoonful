@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import { useSignIn, useSSO } from "@clerk/clerk-expo";
+import { useAuth, useSSO } from "@clerk/clerk-expo";
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import { Redirect, useRouter } from "expo-router";
 
 const colors = {
 	cream: "#faf8f5",
@@ -17,8 +18,15 @@ const colors = {
 };
 
 export default function SignInScreen() {
+	const { isSignedIn, isLoaded } = useAuth();
 	const { startSSOFlow } = useSSO();
 	const [isLoading, setIsLoading] = useState(false);
+	const router = useRouter();
+
+	// If already signed in, redirect to home
+	if (isLoaded && isSignedIn) {
+		return <Redirect href="/" />;
+	}
 
 	const handleGoogleSignIn = async () => {
 		try {
@@ -29,6 +37,8 @@ export default function SignInScreen() {
 
 			if (createdSessionId && setActive) {
 				await setActive({ session: createdSessionId });
+				// Navigate to home after successful sign-in
+				router.replace("/");
 			}
 		} catch (err) {
 			console.error("OAuth error:", err);

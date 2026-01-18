@@ -1,11 +1,10 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useAuth, useUser } from "@clerk/clerk-expo";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { Link, Redirect } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-
-// Note: In a real setup, you'd import from the convex package
-// import { api } from "@spoonful/convex/convex/_generated/api";
+import { useEffect } from "react";
+import { api } from "@spoonful/convex/convex/_generated/api";
 
 export default function HomeScreen() {
 	const { isSignedIn, isLoaded } = useAuth();
@@ -29,7 +28,45 @@ export default function HomeScreen() {
 }
 
 function Dashboard() {
-	const { user } = useUser();
+	const { user: clerkUser, isLoaded: clerkLoaded } = useUser();
+	const convexUser = useQuery(api.users.me);
+	const upsertUser = useMutation(api.users.upsertFromClerk);
+
+	// Sync Clerk user to Convex when signed in but not yet synced
+	useEffect(() => {
+		if (clerkLoaded && clerkUser && convexUser === null) {
+			upsertUser({
+				clerkId: clerkUser.id,
+				email: clerkUser.primaryEmailAddress?.emailAddress ?? "",
+				name: clerkUser.fullName ?? clerkUser.firstName ?? "User",
+				avatarUrl: clerkUser.imageUrl,
+			});
+		}
+	}, [clerkLoaded, clerkUser, convexUser, upsertUser]);
+
+	// Show loading while Clerk or initial Convex query loads
+	if (!clerkLoaded || convexUser === undefined) {
+		return (
+			<View style={styles.container}>
+				<View style={styles.loading}>
+					<Text style={styles.loadingText}>Loading...</Text>
+				</View>
+				<StatusBar style="auto" />
+			</View>
+		);
+	}
+
+	// User is syncing to Convex
+	if (convexUser === null) {
+		return (
+			<View style={styles.container}>
+				<View style={styles.loading}>
+					<Text style={styles.loadingText}>Setting up your account...</Text>
+				</View>
+				<StatusBar style="auto" />
+			</View>
+		);
+	}
 
 	return (
 		<View style={styles.container}>
@@ -37,7 +74,7 @@ function Dashboard() {
 
 			<View style={styles.header}>
 				<Text style={styles.greeting}>
-					Welcome back{user?.firstName ? `, ${user.firstName}` : ""}!
+					Welcome back{convexUser.name ? `, ${convexUser.name}` : ""}!
 				</Text>
 				<Text style={styles.encouragement}>
 					Every small step counts. You've got this.
