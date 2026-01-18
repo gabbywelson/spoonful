@@ -20,7 +20,7 @@ Spoonful is a **household chore management app** built around "spoon theory" —
 ## Architecture Overview
 
 ```
-spoonful-react/
+spoonful/
 ├── apps/
 │   ├── web/              # TanStack Start web application
 │   └── mobile/           # Expo React Native app

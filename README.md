@@ -25,7 +25,7 @@ Based on "spoon theory" - the idea that people have a limited number of "spoons"
 ## Project Structure
 
 ```
-spoonful-react/
+spoonful/
 ├── apps/
 │   ├── web/          # TanStack Start web app
 │   └── mobile/       # Expo React Native app
