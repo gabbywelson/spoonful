@@ -13,8 +13,9 @@ export const me = query({
 });
 
 /**
- * Create or update a user from Clerk webhook/sync
- * This should be called when a user signs in for the first time
+ * Create or update a user from Clerk
+ * This is called when a user signs in and needs to be synced to Convex
+ * It verifies the caller's Clerk identity matches the provided clerkId
  */
 export const upsertFromClerk = mutation({
 	args: {
@@ -24,6 +25,15 @@ export const upsertFromClerk = mutation({
 		avatarUrl: v.optional(v.string()),
 	},
 	handler: async (ctx, args) => {
+		// Verify the caller is authenticated and their ID matches
+		const identity = await ctx.auth.getUserIdentity();
+		if (!identity) {
+			throw new Error("Not authenticated");
+		}
+		if (identity.subject !== args.clerkId) {
+			throw new Error("Cannot create user for different Clerk ID");
+		}
+
 		// Check if user already exists
 		const existingUser = await ctx.db
 			.query("users")
