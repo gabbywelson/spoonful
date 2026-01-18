@@ -6,19 +6,20 @@ import {
 	Bath,
 	BedDouble,
 	Briefcase,
-	Broom,
+	BrushCleaning,
+	Check,
 	ClipboardCheck,
 	DoorOpen,
 	Droplets,
 	Lamp,
 	Laptop,
 	Leaf,
-	SprayCan,
 	Shirt,
 	ShoppingBag,
-	Sink,
+	ShowerHead,
 	Sofa,
 	Sparkles,
+	SprayCan,
 	Trash2,
 	Tv,
 	Users,
@@ -126,95 +127,183 @@ function ChoresManagement() {
 			)}
 
 			{!hasChores ? (
-				<div style={{ display: "grid", gap: "var(--spacing-lg)" }}>
-					<div className="card">
-						<h2 style={{ marginBottom: "var(--spacing-sm)" }}>Start with a few defaults</h2>
-						<p style={{ color: "var(--color-text-muted)", marginBottom: "var(--spacing-md)" }}>
-							Pick the chores that fit your home. You can always add more later.
-						</p>
+				<div style={{ display: "grid", gap: "var(--spacing-xl)" }}>
+					{/* Defaults selection */}
+					<section>
+						<div style={{ marginBottom: "var(--spacing-lg)" }}>
+							<h2 style={{ marginBottom: "var(--spacing-xs)" }}>Pick chores that fit your home</h2>
+							<p style={{ color: "var(--color-text-muted)", margin: 0 }}>
+								Select what matters to you. You can always add more later.
+							</p>
+						</div>
 
 						{defaults === undefined ? (
 							<div className="loading">
 								<div className="spinner" />
 							</div>
 						) : (
-							<div style={{ display: "grid", gap: "var(--spacing-lg)" }}>
+							<div style={{ display: "grid", gap: "var(--spacing-xl)" }}>
 								{defaultsByRoom.map((room) => (
 									<div key={room.room}>
-										<h3 style={{ marginBottom: "var(--spacing-sm)" }}>{room.room}</h3>
+										<h3
+											style={{
+												marginBottom: "var(--spacing-md)",
+												fontSize: "1.125rem",
+												color: "var(--color-text-light)",
+												fontWeight: 500,
+											}}
+										>
+											{room.room}
+										</h3>
 										<div
 											style={{
 												display: "grid",
-												gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+												gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
 												gap: "var(--spacing-md)",
 											}}
 										>
-											{room.chores.map((chore) => (
-												<label
-													key={chore.key}
-													style={{
-														display: "flex",
-														gap: "var(--spacing-sm)",
-														alignItems: "flex-start",
-														padding: "var(--spacing-md)",
-														borderRadius: "var(--radius-md)",
-														border: "1px solid var(--color-cream-dark)",
-														background: selectedDefaults.includes(chore.key)
-															? "var(--color-sage-light)"
-															: "white",
-														cursor: "pointer",
-													}}
-												>
-													<input
-														type="checkbox"
-														checked={selectedDefaults.includes(chore.key)}
-														onChange={() => handleToggleDefault(chore.key)}
-														style={{ marginTop: 4 }}
-													/>
-													<div style={{ display: "flex", gap: "var(--spacing-sm)" }}>
-														<ChoreIcon icon={chore.icon} />
-														<div>
-															<div style={{ fontWeight: 600 }}>{chore.name}</div>
-															<p
+											{room.chores.map((chore) => {
+												const isSelected = selectedDefaults.includes(chore.key);
+												return (
+													<button
+														type="button"
+														key={chore.key}
+														onClick={() => handleToggleDefault(chore.key)}
+														style={{
+															position: "relative",
+															display: "flex",
+															flexDirection: "column",
+															alignItems: "center",
+															textAlign: "center",
+															padding: "var(--spacing-lg) var(--spacing-md)",
+															borderRadius: "var(--radius-lg)",
+															border: isSelected
+																? "2px solid var(--color-sage)"
+																: "2px solid transparent",
+															background: isSelected ? "var(--color-sage-light)" : "white",
+															cursor: "pointer",
+															transition: "all 0.15s ease",
+															boxShadow: isSelected
+																? "0 4px 12px rgba(168, 197, 168, 0.3)"
+																: "0 2px 8px rgba(0, 0, 0, 0.04)",
+														}}
+													>
+														{isSelected && (
+															<span
 																style={{
-																	margin: 0,
-																	fontSize: "0.875rem",
-																	color: "var(--color-text-muted)",
+																	position: "absolute",
+																	top: 8,
+																	right: 8,
+																	width: 20,
+																	height: 20,
+																	borderRadius: "50%",
+																	background: "var(--color-sage)",
+																	display: "flex",
+																	alignItems: "center",
+																	justifyContent: "center",
 																}}
 															>
-																{chore.description ?? "A helpful household reset."}
-															</p>
-														</div>
-													</div>
-												</label>
-											))}
+																<Check size={12} color="white" strokeWidth={3} />
+															</span>
+														)}
+														<ChoreIcon icon={chore.icon} size="large" />
+														<span
+															style={{
+																marginTop: "var(--spacing-sm)",
+																fontWeight: 600,
+																fontSize: "0.9375rem",
+																color: "var(--color-text)",
+																lineHeight: 1.3,
+															}}
+														>
+															{chore.name}
+														</span>
+														{chore.description && (
+															<span
+																style={{
+																	marginTop: "var(--spacing-xs)",
+																	fontSize: "0.8125rem",
+																	color: "var(--color-text-muted)",
+																	lineHeight: 1.4,
+																}}
+															>
+																{chore.description}
+															</span>
+														)}
+													</button>
+												);
+											})}
 										</div>
 									</div>
 								))}
 
-								{defaultsError && (
-									<p style={{ color: "#c44", margin: 0 }}>{defaultsError}</p>
-								)}
+								{defaultsError && <p style={{ color: "#c44", margin: 0 }}>{defaultsError}</p>}
 								{defaultsMessage && (
-									<p style={{ color: "var(--color-text-muted)", margin: 0 }}>{defaultsMessage}</p>
+									<p
+										style={{
+											color: "var(--color-sage-dark)",
+											margin: 0,
+											padding: "var(--spacing-md)",
+											background: "var(--color-sage-light)",
+											borderRadius: "var(--radius-md)",
+										}}
+									>
+										{defaultsMessage}
+									</p>
 								)}
 
-								<button
-									type="button"
-									className="btn btn-primary"
-									onClick={handleAddDefaults}
-									disabled={isAddingDefaults || selectedDefaults.length === 0}
+								<div
+									style={{
+										position: "sticky",
+										bottom: "var(--spacing-lg)",
+										background: "var(--color-cream)",
+										padding: "var(--spacing-md) 0",
+										display: "flex",
+										justifyContent: "center",
+									}}
 								>
-									{isAddingDefaults ? "Adding..." : "Add selected chores"}
-								</button>
+									<button
+										type="button"
+										className="btn btn-primary"
+										onClick={handleAddDefaults}
+										disabled={isAddingDefaults || selectedDefaults.length === 0}
+										style={{
+											padding: "var(--spacing-md) var(--spacing-xl)",
+											fontSize: "1rem",
+										}}
+									>
+										{isAddingDefaults
+											? "Adding..."
+											: selectedDefaults.length === 0
+												? "Select chores to add"
+												: `Add ${selectedDefaults.length} chore${selectedDefaults.length === 1 ? "" : "s"}`}
+									</button>
+								</div>
 							</div>
 						)}
-					</div>
+					</section>
 
-					<AddChoreForm
-						householdId={householdId as Id<"households">}
-						onSuccess={() => setShowAddForm(false)}
-					/>
+					{/* Custom chore form */}
+					<section>
+						<div
+							style={{
+								borderTop: "1px solid var(--color-cream-dark)",
+								paddingTop: "var(--spacing-xl)",
+							}}
+						>
+							<h3
+								style={{
+									marginBottom: "var(--spacing-sm)",
+									fontSize: "1.125rem",
+									color: "var(--color-text-light)",
+									fontWeight: 500,
+								}}
+							>
+								Or add a custom chore
+							</h3>
+							<AddChoreForm householdId={householdId as Id<"households">} onSuccess={() => {}} />
+						</div>
+					</section>
 				</div>
 			) : (
 				<div
@@ -234,44 +323,47 @@ function ChoresManagement() {
 }
 
 const iconMap = {
-	"utensils": Utensils,
+	utensils: Utensils,
 	"trash-2": Trash2,
-	"sparkles": Sparkles,
-	"sink": Sink,
-	"bath": Bath,
+	sparkles: Sparkles,
+	sink: ShowerHead,
+	bath: Bath,
 	"spray-can": SprayCan,
 	"bed-double": BedDouble,
-	"shirt": Shirt,
-	"lamp": Lamp,
-	"sofa": Sofa,
-	"tv": Tv,
-	"broom": Broom,
-	"droplets": Droplets,
-	"briefcase": Briefcase,
+	shirt: Shirt,
+	lamp: Lamp,
+	sofa: Sofa,
+	tv: Tv,
+	broom: BrushCleaning,
+	droplets: Droplets,
+	briefcase: Briefcase,
 	"clipboard-check": ClipboardCheck,
-	"laptop": Laptop,
-	"leaf": Leaf,
+	laptop: Laptop,
+	leaf: Leaf,
 	"door-open": DoorOpen,
 	"shopping-bag": ShoppingBag,
-	"users": Users,
+	users: Users,
 };
 
-function ChoreIcon({ icon }: { icon: string }) {
+function ChoreIcon({ icon, size = "small" }: { icon: string; size?: "small" | "large" }) {
 	const Icon = iconMap[icon as keyof typeof iconMap] ?? Sparkles;
+	const isLarge = size === "large";
 	return (
 		<span
 			style={{
-				width: 28,
-				height: 28,
-				borderRadius: "var(--radius-full)",
-				background: "var(--color-cream-dark)",
+				width: isLarge ? 56 : 28,
+				height: isLarge ? 56 : 28,
+				borderRadius: "var(--radius-lg)",
+				background: isLarge
+					? "linear-gradient(135deg, var(--color-lavender-light) 0%, var(--color-cream-dark) 100%)"
+					: "var(--color-cream-dark)",
 				display: "flex",
 				alignItems: "center",
 				justifyContent: "center",
 				flexShrink: 0,
 			}}
 		>
-			<Icon size={16} />
+			<Icon size={isLarge ? 28 : 16} strokeWidth={isLarge ? 1.5 : 2} />
 		</span>
 	);
 }
@@ -286,9 +378,7 @@ function AddChoreForm({
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [defaultSpoonCost, setDefaultSpoonCost] = useState(2);
-	const [frequencyType, setFrequencyType] = useState<"daily" | "weekly" | "monthly" | "custom">(
-		"weekly",
-	);
+	const [frequency, setFrequency] = useState<"daily" | "weekly" | "monthly" | "custom">("weekly");
 	const [frequencyDays, setFrequencyDays] = useState(7);
 	const [isUnpleasant, setIsUnpleasant] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -307,8 +397,8 @@ function AddChoreForm({
 				name: name.trim(),
 				description: description.trim() || undefined,
 				defaultSpoonCost,
-				frequencyType,
-				frequencyDays: frequencyType === "custom" ? frequencyDays : undefined,
+				frequency,
+				frequencyDays: frequency === "custom" ? frequencyDays : undefined,
 				isUnpleasant,
 			});
 			onSuccess();
@@ -377,9 +467,9 @@ function AddChoreForm({
 						<label htmlFor="frequency">Frequency</label>
 						<select
 							id="frequency"
-							value={frequencyType}
+							value={frequency}
 							onChange={(e) =>
-								setFrequencyType(e.target.value as "daily" | "weekly" | "monthly" | "custom")
+								setFrequency(e.target.value as "daily" | "weekly" | "monthly" | "custom")
 							}
 							disabled={isLoading}
 						>
@@ -391,7 +481,7 @@ function AddChoreForm({
 					</div>
 				</div>
 
-				{frequencyType === "custom" && (
+				{frequency === "custom" && (
 					<div style={{ marginBottom: "var(--spacing-md)" }}>
 						<label htmlFor="customDays">Every X days</label>
 						<input
@@ -463,7 +553,7 @@ function ChoreCard({
 		name: string;
 		description?: string;
 		defaultSpoonCost: number;
-		frequencyType: string;
+		frequency: string;
 		frequencyDays?: number;
 		isUnpleasant: boolean;
 		isActive: boolean;
@@ -477,7 +567,7 @@ function ChoreCard({
 		weekly: "Weekly",
 		monthly: "Monthly",
 		custom: `Every ${chore.frequencyDays} days`,
-	}[chore.frequencyType];
+	}[chore.frequency];
 
 	return (
 		<div className="card" style={{ opacity: chore.isActive ? 1 : 0.6 }}>
