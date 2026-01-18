@@ -48,13 +48,17 @@ export default function HouseholdsScreen() {
 				) : (
 					<View style={styles.householdList}>
 						{households.map((household) => (
-							<View key={household._id} style={styles.householdCard}>
+							<Pressable
+								key={household._id}
+								style={styles.householdCard}
+								onPress={() => router.push(`/household/${household._id}`)}
+							>
 								<Text style={styles.householdName}>{household.name}</Text>
 								<Text style={styles.householdMeta}>
 									{household.memberCount} member{household.memberCount !== 1 ? "s" : ""}
 									{household.role === "admin" && " • Admin"}
 								</Text>
-							</View>
+							</Pressable>
 						))}
 					</View>
 				)}

@@ -2,7 +2,29 @@ import { api } from "@spoonful/convex/convex/_generated/api";
 import type { Id } from "@spoonful/convex/convex/_generated/dataModel";
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
-import { useState } from "react";
+import {
+	Bath,
+	BedDouble,
+	Briefcase,
+	Broom,
+	ClipboardCheck,
+	DoorOpen,
+	Droplets,
+	Lamp,
+	Laptop,
+	Leaf,
+	SprayCan,
+	Shirt,
+	ShoppingBag,
+	Sink,
+	Sofa,
+	Sparkles,
+	Trash2,
+	Tv,
+	Users,
+	Utensils,
+} from "lucide-react";
+import { useMemo, useState } from "react";
 
 export const Route = createFileRoute("/household/$householdId/chores")({
 	component: ChoresManagement,
@@ -13,7 +35,57 @@ function ChoresManagement() {
 	const chores = useQuery(api.chores.list, {
 		householdId: householdId as Id<"households">,
 	});
+	const defaults = useQuery(api.chores.defaults);
+	const createDefaults = useMutation(api.chores.createManyFromDefaults);
 	const [showAddForm, setShowAddForm] = useState(false);
+	const [selectedDefaults, setSelectedDefaults] = useState<string[]>([]);
+	const [isAddingDefaults, setIsAddingDefaults] = useState(false);
+	const [defaultsError, setDefaultsError] = useState<string | null>(null);
+	const [defaultsMessage, setDefaultsMessage] = useState<string | null>(null);
+
+	const defaultsByRoom = useMemo(() => {
+		if (!defaults) return [];
+		const rooms = new Map<string, typeof defaults>();
+		for (const chore of defaults) {
+			const roomChores = rooms.get(chore.room) ?? [];
+			roomChores.push(chore);
+			rooms.set(chore.room, roomChores);
+		}
+		return Array.from(rooms.entries()).map(([room, roomChores]) => ({
+			room,
+			chores: roomChores,
+		}));
+	}, [defaults]);
+
+	const handleToggleDefault = (key: string) => {
+		setSelectedDefaults((prev) =>
+			prev.includes(key) ? prev.filter((value) => value !== key) : [...prev, key],
+		);
+	};
+
+	const handleAddDefaults = async () => {
+		if (selectedDefaults.length === 0) return;
+		setIsAddingDefaults(true);
+		setDefaultsError(null);
+		setDefaultsMessage(null);
+
+		try {
+			const result = await createDefaults({
+				householdId: householdId as Id<"households">,
+				choreKeys: selectedDefaults,
+			});
+			setSelectedDefaults([]);
+			if (result.createdIds.length > 0) {
+				setDefaultsMessage(`Added ${result.createdIds.length} chores to your household.`);
+			} else {
+				setDefaultsMessage("Those chores are already in your household.");
+			}
+		} catch (err) {
+			setDefaultsError(err instanceof Error ? err.message : "Something went wrong");
+		} finally {
+			setIsAddingDefaults(false);
+		}
+	};
 
 	if (chores === undefined) {
 		return (
@@ -22,6 +94,7 @@ function ChoresManagement() {
 			</div>
 		);
 	}
+	const hasChores = chores.length > 0;
 
 	return (
 		<>
@@ -34,32 +107,114 @@ function ChoresManagement() {
 				}}
 			>
 				<h1>Manage Chores</h1>
-				<button
-					type="button"
-					onClick={() => setShowAddForm(!showAddForm)}
-					className="btn btn-primary"
-				>
-					{showAddForm ? "Cancel" : "+ Add Chore"}
-				</button>
+				{hasChores && (
+					<button
+						type="button"
+						onClick={() => setShowAddForm(!showAddForm)}
+						className="btn btn-primary"
+					>
+						{showAddForm ? "Cancel" : "+ Add Chore"}
+					</button>
+				)}
 			</header>
 
-			{showAddForm && (
+			{hasChores && showAddForm && (
 				<AddChoreForm
 					householdId={householdId as Id<"households">}
 					onSuccess={() => setShowAddForm(false)}
 				/>
 			)}
 
-			{chores.length === 0 ? (
-				<div className="card" style={{ textAlign: "center" }}>
-					<p
-						style={{
-							color: "var(--color-text-muted)",
-							marginBottom: "var(--spacing-md)",
-						}}
-					>
-						No chores yet. Add your first chore to get started!
-					</p>
+			{!hasChores ? (
+				<div style={{ display: "grid", gap: "var(--spacing-lg)" }}>
+					<div className="card">
+						<h2 style={{ marginBottom: "var(--spacing-sm)" }}>Start with a few defaults</h2>
+						<p style={{ color: "var(--color-text-muted)", marginBottom: "var(--spacing-md)" }}>
+							Pick the chores that fit your home. You can always add more later.
+						</p>
+
+						{defaults === undefined ? (
+							<div className="loading">
+								<div className="spinner" />
+							</div>
+						) : (
+							<div style={{ display: "grid", gap: "var(--spacing-lg)" }}>
+								{defaultsByRoom.map((room) => (
+									<div key={room.room}>
+										<h3 style={{ marginBottom: "var(--spacing-sm)" }}>{room.room}</h3>
+										<div
+											style={{
+												display: "grid",
+												gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+												gap: "var(--spacing-md)",
+											}}
+										>
+											{room.chores.map((chore) => (
+												<label
+													key={chore.key}
+													style={{
+														display: "flex",
+														gap: "var(--spacing-sm)",
+														alignItems: "flex-start",
+														padding: "var(--spacing-md)",
+														borderRadius: "var(--radius-md)",
+														border: "1px solid var(--color-cream-dark)",
+														background: selectedDefaults.includes(chore.key)
+															? "var(--color-sage-light)"
+															: "white",
+														cursor: "pointer",
+													}}
+												>
+													<input
+														type="checkbox"
+														checked={selectedDefaults.includes(chore.key)}
+														onChange={() => handleToggleDefault(chore.key)}
+														style={{ marginTop: 4 }}
+													/>
+													<div style={{ display: "flex", gap: "var(--spacing-sm)" }}>
+														<ChoreIcon icon={chore.icon} />
+														<div>
+															<div style={{ fontWeight: 600 }}>{chore.name}</div>
+															<p
+																style={{
+																	margin: 0,
+																	fontSize: "0.875rem",
+																	color: "var(--color-text-muted)",
+																}}
+															>
+																{chore.description ?? "A helpful household reset."}
+															</p>
+														</div>
+													</div>
+												</label>
+											))}
+										</div>
+									</div>
+								))}
+
+								{defaultsError && (
+									<p style={{ color: "#c44", margin: 0 }}>{defaultsError}</p>
+								)}
+								{defaultsMessage && (
+									<p style={{ color: "var(--color-text-muted)", margin: 0 }}>{defaultsMessage}</p>
+								)}
+
+								<button
+									type="button"
+									className="btn btn-primary"
+									onClick={handleAddDefaults}
+									disabled={isAddingDefaults || selectedDefaults.length === 0}
+								>
+									{isAddingDefaults ? "Adding..." : "Add selected chores"}
+								</button>
+							</div>
+						)}
+					</div>
+
+					<AddChoreForm
+						householdId={householdId as Id<"households">}
+						onSuccess={() => setShowAddForm(false)}
+					/>
 				</div>
 			) : (
 				<div
@@ -75,6 +230,49 @@ function ChoresManagement() {
 				</div>
 			)}
 		</>
+	);
+}
+
+const iconMap = {
+	"utensils": Utensils,
+	"trash-2": Trash2,
+	"sparkles": Sparkles,
+	"sink": Sink,
+	"bath": Bath,
+	"spray-can": SprayCan,
+	"bed-double": BedDouble,
+	"shirt": Shirt,
+	"lamp": Lamp,
+	"sofa": Sofa,
+	"tv": Tv,
+	"broom": Broom,
+	"droplets": Droplets,
+	"briefcase": Briefcase,
+	"clipboard-check": ClipboardCheck,
+	"laptop": Laptop,
+	"leaf": Leaf,
+	"door-open": DoorOpen,
+	"shopping-bag": ShoppingBag,
+	"users": Users,
+};
+
+function ChoreIcon({ icon }: { icon: string }) {
+	const Icon = iconMap[icon as keyof typeof iconMap] ?? Sparkles;
+	return (
+		<span
+			style={{
+				width: 28,
+				height: 28,
+				borderRadius: "var(--radius-full)",
+				background: "var(--color-cream-dark)",
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				flexShrink: 0,
+			}}
+		>
+			<Icon size={16} />
+		</span>
 	);
 }
 

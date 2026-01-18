@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { defaultChores } from "./defaultChores";
 import { isHouseholdAdmin, isHouseholdMember, requireCurrentUser } from "./lib/auth";
 import { choreFrequency } from "./schema";
 
@@ -36,6 +37,17 @@ export const list = query({
 		);
 
 		return choresWithPreferences;
+	},
+});
+
+/**
+ * Get the default chore catalog
+ */
+export const defaults = query({
+	args: {},
+	handler: async (ctx) => {
+		await requireCurrentUser(ctx);
+		return defaultChores;
 	},
 });
 
@@ -119,6 +131,62 @@ export const create = mutation({
 		});
 
 		return choreId;
+	},
+});
+
+/**
+ * Create multiple chores from the default catalog
+ */
+export const createManyFromDefaults = mutation({
+	args: {
+		householdId: v.id("households"),
+		choreKeys: v.array(v.string()),
+	},
+	handler: async (ctx, args) => {
+		const user = await requireCurrentUser(ctx);
+
+		if (!(await isHouseholdMember(ctx, user._id, args.householdId))) {
+			throw new Error("Not a member of this household");
+		}
+
+		const selectedDefaults = defaultChores.filter((chore) => args.choreKeys.includes(chore.key));
+
+		const existingChores = await ctx.db
+			.query("chores")
+			.withIndex("by_household", (q) => q.eq("householdId", args.householdId))
+			.collect();
+
+		const existingNames = new Set(
+			existingChores.filter((chore) => chore.isActive).map((chore) => chore.name.toLowerCase()),
+		);
+
+		const createdIds = [];
+
+		for (const chore of selectedDefaults) {
+			const normalizedName = chore.name.toLowerCase();
+			if (existingNames.has(normalizedName)) {
+				continue;
+			}
+
+			const choreId = await ctx.db.insert("chores", {
+				householdId: args.householdId,
+				name: chore.name,
+				description: chore.description,
+				frequency: chore.frequency,
+				frequencyDays: chore.frequencyDays,
+				isUnpleasant: chore.isUnpleasant,
+				defaultSpoonCost: chore.defaultSpoonCost,
+				isActive: true,
+			});
+
+			existingNames.add(normalizedName);
+			createdIds.push(choreId);
+		}
+
+		return {
+			createdIds,
+			skippedCount: selectedDefaults.length - createdIds.length,
+		};
 	},
 });
 

@@ -11,6 +11,7 @@
 import type * as assignments from "../assignments.js";
 import type * as chores from "../chores.js";
 import type * as dailyStatus from "../dailyStatus.js";
+import type * as defaultChores from "../defaultChores.js";
 import type * as households from "../households.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_utils from "../lib/utils.js";
@@ -26,6 +27,7 @@ declare const fullApi: ApiFromModules<{
   assignments: typeof assignments;
   chores: typeof chores;
   dailyStatus: typeof dailyStatus;
+  defaultChores: typeof defaultChores;
   households: typeof households;
   "lib/auth": typeof lib_auth;
   "lib/utils": typeof lib_utils;

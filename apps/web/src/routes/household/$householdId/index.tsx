@@ -13,6 +13,9 @@ function HouseholdDashboard() {
 	const household = useQuery(api.households.get, {
 		householdId: householdId as Id<"households">,
 	});
+	const chores = useQuery(api.chores.list, {
+		householdId: householdId as Id<"households">,
+	});
 	const myStatus = useQuery(api.dailyStatus.getMyToday, {
 		householdId: householdId as Id<"households">,
 	});
@@ -57,6 +60,10 @@ function HouseholdDashboard() {
 					gap: "var(--spacing-lg)",
 				}}
 			>
+				{chores && chores.filter((chore) => chore.isActive).length === 0 && (
+					<NoChoresPrompt householdId={householdId} />
+				)}
+
 				<EnergyCheckIn householdId={householdId as Id<"households">} currentStatus={myStatus} />
 
 				<TodayAssignments
@@ -69,6 +76,24 @@ function HouseholdDashboard() {
 				<MembersCard members={household.members ?? []} />
 			</div>
 		</>
+	);
+}
+
+function NoChoresPrompt({ householdId }: { householdId: string }) {
+	return (
+		<div className="card">
+			<h3 style={{ marginBottom: "var(--spacing-sm)" }}>Set up your chores</h3>
+			<p style={{ color: "var(--color-text-muted)", marginBottom: "var(--spacing-md)" }}>
+				Add a few starter chores to get your household going.
+			</p>
+			<Link
+				to="/household/$householdId/chores"
+				params={{ householdId }}
+				className="btn btn-primary"
+			>
+				Choose default chores
+			</Link>
+		</div>
 	);
 }
 
