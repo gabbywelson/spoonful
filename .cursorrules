@@ -1,0 +1,79 @@
+# Spoonful - Cursor Rules
+
+## Project Overview
+
+Spoonful is a household chore management app based on "spoon theory" - helping people with limited energy (ADHD, chronic illness, mental health) manage chores fairly across households.
+
+## Structure
+
+```
+apps/web/          → TanStack Start web app (React 19, Tailwind)
+apps/mobile/       → Expo React Native app
+packages/convex/   → Shared Convex backend (database + functions)
+```
+
+## Tech Stack
+
+- **Frontend**: TanStack Start + Router, React 19, Tailwind CSS
+- **Mobile**: Expo with expo-router
+- **Backend**: Convex (serverless DB + functions)
+- **Auth**: Clerk (synced to Convex users table)
+- **Linting**: Biome (tabs, double quotes, semicolons, trailing commas)
+
+## Key Files
+
+- `packages/convex/convex/schema.ts` - Database schema
+- `packages/convex/convex/lib/auth.ts` - Auth helpers (requireCurrentUser, isHouseholdMember)
+- `apps/web/src/routes/` - File-based routing
+- `apps/web/src/styles.css` - CSS variables design system
+
+## Domain Terms
+
+- **Spoon**: Unit of energy (1-5 scale per chore)
+- **Energy Level**: Daily status - red (low), yellow (medium), green (good)
+- **Household**: Group of users sharing chores
+- **Unpleasant chore**: Tracked separately for fair distribution
+
+## Convex Patterns
+
+```typescript
+// Always authenticate and check membership
+const user = await requireCurrentUser(ctx);
+if (!(await isHouseholdMember(ctx, user._id, args.householdId))) {
+  throw new Error("Not a member of this household");
+}
+
+// Import API
+import { api } from "@spoonful/convex/convex/_generated/api";
+import type { Id } from "@spoonful/convex/convex/_generated/dataModel";
+
+// Cast route params to Convex IDs
+householdId as Id<"households">
+```
+
+## Styling
+
+Soft pastel palette with CSS variables:
+- Primary: `--color-sage` (green)
+- Secondary: `--color-lavender` (purple)
+- Background: `--color-cream`
+- Fonts: Quicksand (body), Comfortaa (headings)
+
+Available classes: `.card`, `.btn`, `.btn-primary`, `.btn-secondary`, `.btn-soft`, `.energy-badge`, `.energy-red/.yellow/.green`
+
+## Commands
+
+```bash
+bun run dev          # Web app (port 3000)
+bun run dev:convex   # Convex backend
+bun run dev:mobile   # Expo mobile
+bun run lint:fix     # Format with Biome
+```
+
+## Guidelines
+
+1. Keep UI calm and encouraging - users may have energy limitations
+2. Always check household membership before returning data
+3. Use soft deletes for chores (isActive: false)
+4. Dates stored as YYYY-MM-DD strings
+5. Follow existing patterns in similar files
