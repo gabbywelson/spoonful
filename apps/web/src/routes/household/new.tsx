@@ -1,7 +1,7 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
-import { useMutation } from "convex/react";
+import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { api } from "@spoonful/convex/convex/_generated/api";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useMutation } from "convex/react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/household/new")({
@@ -63,17 +63,15 @@ function NewHouseholdForm() {
 			</Link>
 
 			<div className="card">
-				<h1 style={{ marginBottom: "var(--spacing-md)" }}>
-					Create a Household
-				</h1>
+				<h1 style={{ marginBottom: "var(--spacing-md)" }}>Create a Household</h1>
 				<p
 					style={{
 						color: "var(--color-text-light)",
 						marginBottom: "var(--spacing-xl)",
 					}}
 				>
-					A household is where your team manages chores together. You can invite
-					others after creating it.
+					A household is where your team manages chores together. You can invite others after
+					creating it.
 				</p>
 
 				<form onSubmit={handleSubmit}>

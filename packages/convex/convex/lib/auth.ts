@@ -1,4 +1,5 @@
-import type { QueryCtx, MutationCtx } from "../_generated/server";
+import type { Id } from "../_generated/dataModel";
+import type { MutationCtx, QueryCtx } from "../_generated/server";
 
 /**
  * Get the current authenticated user from Clerk identity
@@ -35,14 +36,13 @@ export async function requireCurrentUser(ctx: QueryCtx | MutationCtx) {
  */
 export async function isHouseholdMember(
 	ctx: QueryCtx | MutationCtx,
-	userId: string,
-	householdId: string,
+	userId: Id<"users">,
+	householdId: Id<"households">,
 ) {
 	const membership = await ctx.db
 		.query("householdMembers")
 		.withIndex("by_user_and_household", (q) =>
-			// biome-ignore lint/suspicious/noExplicitAny: Convex Id types
-			q.eq("userId", userId as any).eq("householdId", householdId as any),
+			q.eq("userId", userId).eq("householdId", householdId),
 		)
 		.unique();
 
@@ -54,14 +54,13 @@ export async function isHouseholdMember(
  */
 export async function isHouseholdAdmin(
 	ctx: QueryCtx | MutationCtx,
-	userId: string,
-	householdId: string,
+	userId: Id<"users">,
+	householdId: Id<"households">,
 ) {
 	const membership = await ctx.db
 		.query("householdMembers")
 		.withIndex("by_user_and_household", (q) =>
-			// biome-ignore lint/suspicious/noExplicitAny: Convex Id types
-			q.eq("userId", userId as any).eq("householdId", householdId as any),
+			q.eq("userId", userId).eq("householdId", householdId),
 		)
 		.unique();
 

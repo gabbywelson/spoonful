@@ -54,7 +54,8 @@
       ".output",
       ".convex",
       ".expo",
-      "convex/_generated"
+      "convex/_generated",
+      "routeTree.gen.ts"
     ]
   }
 }

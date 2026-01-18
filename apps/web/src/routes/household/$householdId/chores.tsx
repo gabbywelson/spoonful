@@ -1,7 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useQuery, useMutation } from "convex/react";
 import { api } from "@spoonful/convex/convex/_generated/api";
 import type { Id } from "@spoonful/convex/convex/_generated/dataModel";
+import { createFileRoute } from "@tanstack/react-router";
+import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/household/$householdId/chores")({
@@ -35,6 +35,7 @@ function ChoresManagement() {
 			>
 				<h1>Manage Chores</h1>
 				<button
+					type="button"
 					onClick={() => setShowAddForm(!showAddForm)}
 					className="btn btn-primary"
 				>
@@ -69,11 +70,7 @@ function ChoresManagement() {
 					}}
 				>
 					{chores.map((chore) => (
-						<ChoreCard
-							key={chore._id}
-							chore={chore}
-							householdId={householdId as Id<"households">}
-						/>
+						<ChoreCard key={chore._id} chore={chore} />
 					))}
 				</div>
 			)}
@@ -91,9 +88,9 @@ function AddChoreForm({
 	const [name, setName] = useState("");
 	const [description, setDescription] = useState("");
 	const [defaultSpoonCost, setDefaultSpoonCost] = useState(2);
-	const [frequencyType, setFrequencyType] = useState<
-		"daily" | "weekly" | "monthly" | "custom"
-	>("weekly");
+	const [frequencyType, setFrequencyType] = useState<"daily" | "weekly" | "monthly" | "custom">(
+		"weekly",
+	);
 	const [frequencyDays, setFrequencyDays] = useState(7);
 	const [isUnpleasant, setIsUnpleasant] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -184,9 +181,7 @@ function AddChoreForm({
 							id="frequency"
 							value={frequencyType}
 							onChange={(e) =>
-								setFrequencyType(
-									e.target.value as "daily" | "weekly" | "monthly" | "custom",
-								)
+								setFrequencyType(e.target.value as "daily" | "weekly" | "monthly" | "custom")
 							}
 							disabled={isLoading}
 						>
@@ -254,11 +249,7 @@ function AddChoreForm({
 					</p>
 				)}
 
-				<button
-					type="submit"
-					className="btn btn-primary"
-					disabled={isLoading || !name.trim()}
-				>
+				<button type="submit" className="btn btn-primary" disabled={isLoading || !name.trim()}>
 					{isLoading ? "Adding..." : "Add Chore"}
 				</button>
 			</form>
@@ -268,7 +259,6 @@ function AddChoreForm({
 
 function ChoreCard({
 	chore,
-	householdId,
 }: {
 	chore: {
 		_id: Id<"chores">;
@@ -280,7 +270,6 @@ function ChoreCard({
 		isUnpleasant: boolean;
 		isActive: boolean;
 	};
-	householdId: Id<"households">;
 }) {
 	const [showPreferences, setShowPreferences] = useState(false);
 	const deleteChore = useMutation(api.chores.remove);
@@ -306,9 +295,7 @@ function ChoreCard({
 				<span
 					style={{
 						fontSize: "0.875rem",
-						background: chore.isUnpleasant
-							? "var(--color-peach-light)"
-							: "var(--color-cream-dark)",
+						background: chore.isUnpleasant ? "var(--color-peach-light)" : "var(--color-cream-dark)",
 						padding: "2px 8px",
 						borderRadius: "var(--radius-full)",
 					}}
@@ -363,6 +350,7 @@ function ChoreCard({
 
 			<div style={{ display: "flex", gap: "var(--spacing-sm)" }}>
 				<button
+					type="button"
 					onClick={() => setShowPreferences(!showPreferences)}
 					className="btn btn-soft"
 					style={{ flex: 1, fontSize: "0.875rem" }}
@@ -370,6 +358,7 @@ function ChoreCard({
 					My Preference
 				</button>
 				<button
+					type="button"
 					onClick={() => {
 						if (confirm(`Are you sure you want to delete "${chore.name}"?`)) {
 							deleteChore({ choreId: chore._id });
@@ -386,11 +375,7 @@ function ChoreCard({
 			</div>
 
 			{showPreferences && (
-				<PreferenceEditor
-					choreId={chore._id}
-					householdId={householdId}
-					defaultSpoonCost={chore.defaultSpoonCost}
-				/>
+				<PreferenceEditor choreId={chore._id} defaultSpoonCost={chore.defaultSpoonCost} />
 			)}
 		</div>
 	);
@@ -398,40 +383,21 @@ function ChoreCard({
 
 function PreferenceEditor({
 	choreId,
-	householdId,
 	defaultSpoonCost,
 }: {
 	choreId: Id<"chores">;
-	householdId: Id<"households">;
 	defaultSpoonCost: number;
 }) {
-	const preference = useQuery(api.chores.getMyPreference, {
-		choreId,
-		householdId,
-	});
 	const setPreference = useMutation(api.chores.setPreference);
-	const [personalSpoonCost, setPersonalSpoonCost] = useState<number | null>(
-		null,
-	);
-	const [willingnessLevel, setWillingnessLevel] = useState<number>(3);
+	const [personalSpoonCost, setPersonalSpoonCost] = useState<number>(defaultSpoonCost);
 	const [isUpdating, setIsUpdating] = useState(false);
-
-	// Initialize from preference when loaded
-	useState(() => {
-		if (preference) {
-			setPersonalSpoonCost(preference.personalSpoonCost ?? null);
-			setWillingnessLevel(preference.willingnessLevel ?? 3);
-		}
-	});
 
 	const handleSave = async () => {
 		setIsUpdating(true);
 		try {
 			await setPreference({
 				choreId,
-				householdId,
-				personalSpoonCost: personalSpoonCost ?? undefined,
-				willingnessLevel,
+				spoonCost: personalSpoonCost,
 			});
 		} finally {
 			setIsUpdating(false);
@@ -446,21 +412,17 @@ function PreferenceEditor({
 				borderTop: "1px solid var(--color-cream-dark)",
 			}}
 		>
-			<div style={{ marginBottom: "var(--spacing-sm)" }}>
-				<label style={{ fontSize: "0.875rem" }}>
+			<div style={{ marginBottom: "var(--spacing-md)" }}>
+				<label htmlFor="personalSpoonCost" style={{ fontSize: "0.875rem" }}>
 					How many spoons does this cost you?
 				</label>
 				<select
-					value={personalSpoonCost ?? "default"}
-					onChange={(e) =>
-						setPersonalSpoonCost(
-							e.target.value === "default" ? null : Number(e.target.value),
-						)
-					}
+					id="personalSpoonCost"
+					value={personalSpoonCost}
+					onChange={(e) => setPersonalSpoonCost(Number(e.target.value))}
 					disabled={isUpdating}
 					style={{ fontSize: "0.875rem" }}
 				>
-					<option value="default">Use default ({defaultSpoonCost})</option>
 					{[1, 2, 3, 4, 5].map((n) => (
 						<option key={n} value={n}>
 							{n} {n === 1 ? "spoon" : "spoons"}
@@ -469,52 +431,8 @@ function PreferenceEditor({
 				</select>
 			</div>
 
-			<div style={{ marginBottom: "var(--spacing-md)" }}>
-				<label style={{ fontSize: "0.875rem" }}>
-					How willing are you to do this? (1-5)
-				</label>
-				<div
-					style={{
-						display: "flex",
-						gap: "var(--spacing-xs)",
-						marginTop: "var(--spacing-xs)",
-					}}
-				>
-					{[1, 2, 3, 4, 5].map((level) => (
-						<button
-							key={level}
-							onClick={() => setWillingnessLevel(level)}
-							disabled={isUpdating}
-							style={{
-								flex: 1,
-								padding: "var(--spacing-xs)",
-								background:
-									willingnessLevel === level
-										? "var(--color-sage)"
-										: "var(--color-cream-dark)",
-								color:
-									willingnessLevel === level ? "white" : "var(--color-text)",
-								border: "none",
-								borderRadius: "var(--radius-sm)",
-								cursor: "pointer",
-							}}
-						>
-							{level}
-						</button>
-					))}
-				</div>
-				<p
-					style={{
-						fontSize: "0.75rem",
-						color: "var(--color-text-muted)",
-						marginTop: "var(--spacing-xs)",
-					}}
-				>
-					1 = strongly prefer not to, 5 = happy to do it
-				</p>
-			</div>
-
 			<button
+				type="button"
 				onClick={handleSave}
 				className="btn btn-primary"
 				style={{ width: "100%", fontSize: "0.875rem" }}

@@ -8,10 +8,7 @@ export const env = createEnv({
 
 	client: {
 		VITE_CONVEX_URL: z.string().url().describe("Convex deployment URL"),
-		VITE_CLERK_PUBLISHABLE_KEY: z
-			.string()
-			.startsWith("pk_")
-			.describe("Clerk publishable key"),
+		VITE_CLERK_PUBLISHABLE_KEY: z.string().startsWith("pk_").describe("Clerk publishable key"),
 	},
 
 	runtimeEnv: import.meta.env,

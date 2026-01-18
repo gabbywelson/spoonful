@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { requireCurrentUser, isHouseholdMember, isHouseholdAdmin } from "./lib/auth";
+import { isHouseholdAdmin, isHouseholdMember, requireCurrentUser } from "./lib/auth";
 import { generateInviteCode } from "./lib/utils";
 
 /**

@@ -1,5 +1,5 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
+import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
+import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/household/$householdId")({
 	component: HouseholdLayout,

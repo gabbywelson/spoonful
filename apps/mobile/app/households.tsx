@@ -1,9 +1,9 @@
-import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
-import { Link, router } from "expo-router";
 import { useAuth } from "@clerk/clerk-expo";
-import { StatusBar } from "expo-status-bar";
-import { useQuery } from "convex/react";
 import { api } from "@spoonful/convex/convex/_generated/api";
+import { useQuery } from "convex/react";
+import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 const colors = {
 	cream: "#faf8f5",

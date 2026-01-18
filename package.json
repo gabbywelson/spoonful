@@ -1,10 +1,7 @@
 {
   "name": "spoonful",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "dev": "npm run dev -w @spoonful/web",
     "dev:convex": "npm run dev -w @spoonful/convex",

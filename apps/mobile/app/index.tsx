@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useAuth, useUser } from "@clerk/clerk-expo";
-import { useQuery, useMutation } from "convex/react";
+import { api } from "@spoonful/convex/convex/_generated/api";
+import { useMutation, useQuery } from "convex/react";
 import { Link, Redirect } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { api } from "@spoonful/convex/convex/_generated/api";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen() {
 	const { isSignedIn, isLoaded } = useAuth();
@@ -76,9 +76,7 @@ function Dashboard() {
 				<Text style={styles.greeting}>
 					Welcome back{convexUser.name ? `, ${convexUser.name}` : ""}!
 				</Text>
-				<Text style={styles.encouragement}>
-					Every small step counts. You've got this.
-				</Text>
+				<Text style={styles.encouragement}>Every small step counts. You've got this.</Text>
 			</View>
 
 			<View style={styles.card}>
@@ -102,9 +100,7 @@ function Dashboard() {
 
 			<View style={styles.card}>
 				<Text style={styles.cardTitle}>Today's Tasks</Text>
-				<Text style={styles.emptyText}>
-					Set up your household to get started with tasks!
-				</Text>
+				<Text style={styles.emptyText}>Set up your household to get started with tasks!</Text>
 			</View>
 
 			<View style={styles.actions}>

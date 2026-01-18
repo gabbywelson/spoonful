@@ -8,179 +8,177 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as HouseholdNewRouteImport } from './routes/household/new'
-import { Route as HouseholdJoinRouteImport } from './routes/household/join'
-import { Route as HouseholdHouseholdIdRouteImport } from './routes/household/$householdId'
-import { Route as HouseholdHouseholdIdIndexRouteImport } from './routes/household/$householdId/index'
-import { Route as HouseholdHouseholdIdChoresRouteImport } from './routes/household/$householdId/chores'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as HouseholdHouseholdIdRouteImport } from "./routes/household/$householdId";
+import { Route as HouseholdHouseholdIdChoresRouteImport } from "./routes/household/$householdId/chores";
+import { Route as HouseholdHouseholdIdIndexRouteImport } from "./routes/household/$householdId/index";
+import { Route as HouseholdJoinRouteImport } from "./routes/household/join";
+import { Route as HouseholdNewRouteImport } from "./routes/household/new";
+import { Route as IndexRouteImport } from "./routes/index";
 
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/",
+	path: "/",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const HouseholdNewRoute = HouseholdNewRouteImport.update({
-  id: '/household/new',
-  path: '/household/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/household/new",
+	path: "/household/new",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const HouseholdJoinRoute = HouseholdJoinRouteImport.update({
-  id: '/household/join',
-  path: '/household/join',
-  getParentRoute: () => rootRouteImport,
-} as any)
+	id: "/household/join",
+	path: "/household/join",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const HouseholdHouseholdIdRoute = HouseholdHouseholdIdRouteImport.update({
-  id: '/household/$householdId',
-  path: '/household/$householdId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HouseholdHouseholdIdIndexRoute =
-  HouseholdHouseholdIdIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => HouseholdHouseholdIdRoute,
-  } as any)
-const HouseholdHouseholdIdChoresRoute =
-  HouseholdHouseholdIdChoresRouteImport.update({
-    id: '/chores',
-    path: '/chores',
-    getParentRoute: () => HouseholdHouseholdIdRoute,
-  } as any)
+	id: "/household/$householdId",
+	path: "/household/$householdId",
+	getParentRoute: () => rootRouteImport,
+} as any);
+const HouseholdHouseholdIdIndexRoute = HouseholdHouseholdIdIndexRouteImport.update({
+	id: "/",
+	path: "/",
+	getParentRoute: () => HouseholdHouseholdIdRoute,
+} as any);
+const HouseholdHouseholdIdChoresRoute = HouseholdHouseholdIdChoresRouteImport.update({
+	id: "/chores",
+	path: "/chores",
+	getParentRoute: () => HouseholdHouseholdIdRoute,
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/household/$householdId': typeof HouseholdHouseholdIdRouteWithChildren
-  '/household/join': typeof HouseholdJoinRoute
-  '/household/new': typeof HouseholdNewRoute
-  '/household/$householdId/chores': typeof HouseholdHouseholdIdChoresRoute
-  '/household/$householdId/': typeof HouseholdHouseholdIdIndexRoute
+	"/": typeof IndexRoute;
+	"/household/$householdId": typeof HouseholdHouseholdIdRouteWithChildren;
+	"/household/join": typeof HouseholdJoinRoute;
+	"/household/new": typeof HouseholdNewRoute;
+	"/household/$householdId/chores": typeof HouseholdHouseholdIdChoresRoute;
+	"/household/$householdId/": typeof HouseholdHouseholdIdIndexRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/household/join': typeof HouseholdJoinRoute
-  '/household/new': typeof HouseholdNewRoute
-  '/household/$householdId/chores': typeof HouseholdHouseholdIdChoresRoute
-  '/household/$householdId': typeof HouseholdHouseholdIdIndexRoute
+	"/": typeof IndexRoute;
+	"/household/join": typeof HouseholdJoinRoute;
+	"/household/new": typeof HouseholdNewRoute;
+	"/household/$householdId/chores": typeof HouseholdHouseholdIdChoresRoute;
+	"/household/$householdId": typeof HouseholdHouseholdIdIndexRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/household/$householdId': typeof HouseholdHouseholdIdRouteWithChildren
-  '/household/join': typeof HouseholdJoinRoute
-  '/household/new': typeof HouseholdNewRoute
-  '/household/$householdId/chores': typeof HouseholdHouseholdIdChoresRoute
-  '/household/$householdId/': typeof HouseholdHouseholdIdIndexRoute
+	__root__: typeof rootRouteImport;
+	"/": typeof IndexRoute;
+	"/household/$householdId": typeof HouseholdHouseholdIdRouteWithChildren;
+	"/household/join": typeof HouseholdJoinRoute;
+	"/household/new": typeof HouseholdNewRoute;
+	"/household/$householdId/chores": typeof HouseholdHouseholdIdChoresRoute;
+	"/household/$householdId/": typeof HouseholdHouseholdIdIndexRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/household/$householdId'
-    | '/household/join'
-    | '/household/new'
-    | '/household/$householdId/chores'
-    | '/household/$householdId/'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/household/join'
-    | '/household/new'
-    | '/household/$householdId/chores'
-    | '/household/$householdId'
-  id:
-    | '__root__'
-    | '/'
-    | '/household/$householdId'
-    | '/household/join'
-    | '/household/new'
-    | '/household/$householdId/chores'
-    | '/household/$householdId/'
-  fileRoutesById: FileRoutesById
+	fileRoutesByFullPath: FileRoutesByFullPath;
+	fullPaths:
+		| "/"
+		| "/household/$householdId"
+		| "/household/join"
+		| "/household/new"
+		| "/household/$householdId/chores"
+		| "/household/$householdId/";
+	fileRoutesByTo: FileRoutesByTo;
+	to:
+		| "/"
+		| "/household/join"
+		| "/household/new"
+		| "/household/$householdId/chores"
+		| "/household/$householdId";
+	id:
+		| "__root__"
+		| "/"
+		| "/household/$householdId"
+		| "/household/join"
+		| "/household/new"
+		| "/household/$householdId/chores"
+		| "/household/$householdId/";
+	fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  HouseholdHouseholdIdRoute: typeof HouseholdHouseholdIdRouteWithChildren
-  HouseholdJoinRoute: typeof HouseholdJoinRoute
-  HouseholdNewRoute: typeof HouseholdNewRoute
+	IndexRoute: typeof IndexRoute;
+	HouseholdHouseholdIdRoute: typeof HouseholdHouseholdIdRouteWithChildren;
+	HouseholdJoinRoute: typeof HouseholdJoinRoute;
+	HouseholdNewRoute: typeof HouseholdNewRoute;
 }
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/household/new': {
-      id: '/household/new'
-      path: '/household/new'
-      fullPath: '/household/new'
-      preLoaderRoute: typeof HouseholdNewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/household/join': {
-      id: '/household/join'
-      path: '/household/join'
-      fullPath: '/household/join'
-      preLoaderRoute: typeof HouseholdJoinRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/household/$householdId': {
-      id: '/household/$householdId'
-      path: '/household/$householdId'
-      fullPath: '/household/$householdId'
-      preLoaderRoute: typeof HouseholdHouseholdIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/household/$householdId/': {
-      id: '/household/$householdId/'
-      path: '/'
-      fullPath: '/household/$householdId/'
-      preLoaderRoute: typeof HouseholdHouseholdIdIndexRouteImport
-      parentRoute: typeof HouseholdHouseholdIdRoute
-    }
-    '/household/$householdId/chores': {
-      id: '/household/$householdId/chores'
-      path: '/chores'
-      fullPath: '/household/$householdId/chores'
-      preLoaderRoute: typeof HouseholdHouseholdIdChoresRouteImport
-      parentRoute: typeof HouseholdHouseholdIdRoute
-    }
-  }
+declare module "@tanstack/react-router" {
+	interface FileRoutesByPath {
+		"/": {
+			id: "/";
+			path: "/";
+			fullPath: "/";
+			preLoaderRoute: typeof IndexRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/household/new": {
+			id: "/household/new";
+			path: "/household/new";
+			fullPath: "/household/new";
+			preLoaderRoute: typeof HouseholdNewRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/household/join": {
+			id: "/household/join";
+			path: "/household/join";
+			fullPath: "/household/join";
+			preLoaderRoute: typeof HouseholdJoinRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/household/$householdId": {
+			id: "/household/$householdId";
+			path: "/household/$householdId";
+			fullPath: "/household/$householdId";
+			preLoaderRoute: typeof HouseholdHouseholdIdRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/household/$householdId/": {
+			id: "/household/$householdId/";
+			path: "/";
+			fullPath: "/household/$householdId/";
+			preLoaderRoute: typeof HouseholdHouseholdIdIndexRouteImport;
+			parentRoute: typeof HouseholdHouseholdIdRoute;
+		};
+		"/household/$householdId/chores": {
+			id: "/household/$householdId/chores";
+			path: "/chores";
+			fullPath: "/household/$householdId/chores";
+			preLoaderRoute: typeof HouseholdHouseholdIdChoresRouteImport;
+			parentRoute: typeof HouseholdHouseholdIdRoute;
+		};
+	}
 }
 
 interface HouseholdHouseholdIdRouteChildren {
-  HouseholdHouseholdIdChoresRoute: typeof HouseholdHouseholdIdChoresRoute
-  HouseholdHouseholdIdIndexRoute: typeof HouseholdHouseholdIdIndexRoute
+	HouseholdHouseholdIdChoresRoute: typeof HouseholdHouseholdIdChoresRoute;
+	HouseholdHouseholdIdIndexRoute: typeof HouseholdHouseholdIdIndexRoute;
 }
 
 const HouseholdHouseholdIdRouteChildren: HouseholdHouseholdIdRouteChildren = {
-  HouseholdHouseholdIdChoresRoute: HouseholdHouseholdIdChoresRoute,
-  HouseholdHouseholdIdIndexRoute: HouseholdHouseholdIdIndexRoute,
-}
+	HouseholdHouseholdIdChoresRoute: HouseholdHouseholdIdChoresRoute,
+	HouseholdHouseholdIdIndexRoute: HouseholdHouseholdIdIndexRoute,
+};
 
-const HouseholdHouseholdIdRouteWithChildren =
-  HouseholdHouseholdIdRoute._addFileChildren(HouseholdHouseholdIdRouteChildren)
+const HouseholdHouseholdIdRouteWithChildren = HouseholdHouseholdIdRoute._addFileChildren(
+	HouseholdHouseholdIdRouteChildren,
+);
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  HouseholdHouseholdIdRoute: HouseholdHouseholdIdRouteWithChildren,
-  HouseholdJoinRoute: HouseholdJoinRoute,
-  HouseholdNewRoute: HouseholdNewRoute,
-}
+	IndexRoute: IndexRoute,
+	HouseholdHouseholdIdRoute: HouseholdHouseholdIdRouteWithChildren,
+	HouseholdJoinRoute: HouseholdJoinRoute,
+	HouseholdNewRoute: HouseholdNewRoute,
+};
 export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+	._addFileChildren(rootRouteChildren)
+	._addFileTypes<FileRouteTypes>();
 
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
+import type { getRouter } from "./router.tsx";
+declare module "@tanstack/react-start" {
+	interface Register {
+		ssr: true;
+		router: Awaited<ReturnType<typeof getRouter>>;
+	}
 }

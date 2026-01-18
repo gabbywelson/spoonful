@@ -1,6 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { requireCurrentUser, isHouseholdMember, isHouseholdAdmin } from "./lib/auth";
+import { isHouseholdAdmin, isHouseholdMember, requireCurrentUser } from "./lib/auth";
 import { choreFrequency } from "./schema";
 
 /**
@@ -148,7 +148,10 @@ export const update = mutation({
 			throw new Error("Only admins can update chores");
 		}
 
-		if (args.defaultSpoonCost !== undefined && (args.defaultSpoonCost < 1 || args.defaultSpoonCost > 5)) {
+		if (
+			args.defaultSpoonCost !== undefined &&
+			(args.defaultSpoonCost < 1 || args.defaultSpoonCost > 5)
+		) {
 			throw new Error("Spoon cost must be between 1 and 5");
 		}
 

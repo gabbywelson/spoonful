@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useAuth, useSSO } from "@clerk/clerk-expo";
-import { useState } from "react";
-import { StatusBar } from "expo-status-bar";
 import { Redirect, useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const colors = {
 	cream: "#faf8f5",
@@ -54,22 +54,22 @@ export default function SignInScreen() {
 			<View style={styles.content}>
 				<View style={styles.header}>
 					<Text style={styles.title}>Spoonful</Text>
-					<Text style={styles.subtitle}>
-						Gentle chore management for real humans
-					</Text>
+					<Text style={styles.subtitle}>Gentle chore management for real humans</Text>
 				</View>
 
 				<View style={styles.card}>
 					<Text style={styles.cardText}>
-						Built with spoon theory in mind. Manage household chores in a way
-						that respects your energy, your limits, and your humanity.
+						Built with spoon theory in mind. Manage household chores in a way that respects your
+						energy, your limits, and your humanity.
 					</Text>
 
 					<View style={styles.features}>
 						<Text style={styles.feature}>✨ Check in with your daily energy level</Text>
 						<Text style={styles.feature}>🥄 Rate how many "spoons" each chore costs you</Text>
 						<Text style={styles.feature}>⚖️ Fair distribution based on capacity</Text>
-						<Text style={styles.feature}>💚 Built for ADHD, chronic illness, and mental health</Text>
+						<Text style={styles.feature}>
+							💚 Built for ADHD, chronic illness, and mental health
+						</Text>
 					</View>
 
 					<Pressable

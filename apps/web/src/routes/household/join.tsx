@@ -1,7 +1,7 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
-import { useMutation } from "convex/react";
+import { RedirectToSignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { api } from "@spoonful/convex/convex/_generated/api";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useMutation } from "convex/react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/household/join")({

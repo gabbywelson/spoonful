@@ -1,7 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { requireCurrentUser, isHouseholdMember } from "./lib/auth";
-import { getTodayDate, getMaxSpoonsForEnergyLevel } from "./lib/utils";
+import { isHouseholdMember, requireCurrentUser } from "./lib/auth";
+import { getMaxSpoonsForEnergyLevel, getTodayDate } from "./lib/utils";
 
 /**
  * Get today's assignments for a household

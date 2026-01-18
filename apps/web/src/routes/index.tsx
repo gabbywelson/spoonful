@@ -1,13 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-	SignedIn,
-	SignedOut,
-	SignInButton,
-	UserButton,
-	useUser,
-} from "@clerk/clerk-react";
-import { useQuery, useMutation } from "convex/react";
+import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 import { api } from "@spoonful/convex/convex/_generated/api";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { useMutation, useQuery } from "convex/react";
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/")({
@@ -73,8 +67,8 @@ function LandingPage() {
 				}}
 			>
 				<p style={{ marginBottom: "var(--spacing-lg)" }}>
-					Built with spoon theory in mind. Manage household chores in a way that
-					respects your energy, your limits, and your humanity.
+					Built with spoon theory in mind. Manage household chores in a way that respects your
+					energy, your limits, and your humanity.
 				</p>
 
 				<ul
@@ -94,15 +88,13 @@ function LandingPage() {
 				</ul>
 
 				<SignInButton mode="modal">
-					<button className="btn btn-primary" style={{ width: "100%" }}>
+					<button type="button" className="btn btn-primary" style={{ width: "100%" }}>
 						Get Started
 					</button>
 				</SignInButton>
 			</div>
 
-			<p className="encouragement">
-				"You're doing your best, and that's more than enough."
-			</p>
+			<p className="encouragement">"You're doing your best, and that's more than enough."</p>
 		</div>
 	);
 }
@@ -193,9 +185,7 @@ function DashboardContent({ user }: { user: { _id: string; name: string } }) {
 function SetupPrompt() {
 	return (
 		<div className="card" style={{ textAlign: "center" }}>
-			<h2 style={{ marginBottom: "var(--spacing-md)" }}>
-				Let's get you set up!
-			</h2>
+			<h2 style={{ marginBottom: "var(--spacing-md)" }}>Let's get you set up!</h2>
 			<p>We're syncing your account. This should only take a moment...</p>
 			<div className="loading">
 				<div className="spinner" />
@@ -207,12 +197,10 @@ function SetupPrompt() {
 function NoHouseholdPrompt() {
 	return (
 		<div className="card" style={{ textAlign: "center" }}>
-			<h2 style={{ marginBottom: "var(--spacing-md)" }}>
-				Create or Join a Household
-			</h2>
+			<h2 style={{ marginBottom: "var(--spacing-md)" }}>Create or Join a Household</h2>
 			<p style={{ marginBottom: "var(--spacing-lg)" }}>
-				To start managing chores, you'll need to be part of a household. You can
-				create one or join an existing one with an invite code.
+				To start managing chores, you'll need to be part of a household. You can create one or join
+				an existing one with an invite code.
 			</p>
 
 			<div
@@ -266,9 +254,7 @@ function HouseholdOverview({
 							color: "inherit",
 						}}
 					>
-						<h3 style={{ marginBottom: "var(--spacing-sm)" }}>
-							{household.name}
-						</h3>
+						<h3 style={{ marginBottom: "var(--spacing-sm)" }}>{household.name}</h3>
 						<p
 							style={{
 								color: "var(--color-text-muted)",

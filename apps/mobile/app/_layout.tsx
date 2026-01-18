@@ -1,8 +1,8 @@
-import { Slot } from "expo-router";
-import { ClerkProvider, ClerkLoaded } from "@clerk/clerk-expo";
-import { ConvexProviderWithClerk } from "convex/react-clerk";
-import { ConvexReactClient } from "convex/react";
+import { ClerkLoaded, ClerkProvider } from "@clerk/clerk-expo";
 import { useAuth } from "@clerk/clerk-expo";
+import { ConvexReactClient } from "convex/react";
+import { ConvexProviderWithClerk } from "convex/react-clerk";
+import { Slot } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { env } from "../lib/env";
 

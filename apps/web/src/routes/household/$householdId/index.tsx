@@ -1,7 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery, useMutation } from "convex/react";
 import { api } from "@spoonful/convex/convex/_generated/api";
 import type { Id } from "@spoonful/convex/convex/_generated/dataModel";
+import { Link, createFileRoute } from "@tanstack/react-router";
+import { useMutation, useQuery } from "convex/react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/household/$householdId/")({
@@ -57,20 +57,14 @@ function HouseholdDashboard() {
 					gap: "var(--spacing-lg)",
 				}}
 			>
-				<EnergyCheckIn
-					householdId={householdId as Id<"households">}
-					currentStatus={myStatus}
-				/>
+				<EnergyCheckIn householdId={householdId as Id<"households">} currentStatus={myStatus} />
 
 				<TodayAssignments
 					householdId={householdId as Id<"households">}
 					assignments={myAssignments ?? []}
 				/>
 
-				<QuickActions
-					householdId={householdId}
-					inviteCode={household.inviteCode}
-				/>
+				<QuickActions householdId={householdId} inviteCode={household.inviteCode} />
 
 				<MembersCard members={household.members ?? []} />
 			</div>
@@ -105,9 +99,7 @@ function EnergyCheckIn({
 
 	return (
 		<div className="card">
-			<h3 style={{ marginBottom: "var(--spacing-md)" }}>
-				How are you feeling today?
-			</h3>
+			<h3 style={{ marginBottom: "var(--spacing-md)" }}>How are you feeling today?</h3>
 
 			<div
 				style={{
@@ -118,6 +110,7 @@ function EnergyCheckIn({
 			>
 				{(["red", "yellow", "green"] as const).map((level) => (
 					<button
+						type="button"
 						key={level}
 						onClick={() => handleSetEnergy(level)}
 						disabled={isUpdating}
@@ -145,16 +138,12 @@ function EnergyCheckIn({
 			</div>
 
 			{currentStatus && (
-				<p
-					className="encouragement"
-					style={{ margin: 0, fontSize: "0.875rem" }}
-				>
+				<p className="encouragement" style={{ margin: 0, fontSize: "0.875rem" }}>
 					{currentStatus.energyLevel === "red" &&
 						"It's okay to take things slow. Be gentle with yourself."}
 					{currentStatus.energyLevel === "yellow" &&
 						"You're doing great! Remember to take breaks when you need them."}
-					{currentStatus.energyLevel === "green" &&
-						"Wonderful! Let's make the most of today."}
+					{currentStatus.energyLevel === "green" && "Wonderful! Let's make the most of today."}
 				</p>
 			)}
 		</div>
@@ -209,9 +198,7 @@ function TodayAssignments({
 				}}
 			>
 				<h3>Today's Tasks</h3>
-				<span
-					style={{ color: "var(--color-text-muted)", fontSize: "0.875rem" }}
-				>
+				<span style={{ color: "var(--color-text-muted)", fontSize: "0.875rem" }}>
 					{completedSpoons}/{totalSpoons} spoons
 				</span>
 			</div>
@@ -227,6 +214,7 @@ function TodayAssignments({
 						No assignments yet for today.
 					</p>
 					<button
+						type="button"
 						onClick={handleGenerate}
 						className="btn btn-secondary"
 						disabled={isGenerating}
@@ -251,14 +239,13 @@ function TodayAssignments({
 								alignItems: "center",
 								gap: "var(--spacing-sm)",
 								padding: "var(--spacing-sm)",
-								background: assignment.completed
-									? "var(--color-sage-light)"
-									: "var(--color-cream)",
+								background: assignment.completed ? "var(--color-sage-light)" : "var(--color-cream)",
 								borderRadius: "var(--radius-md)",
 								opacity: assignment.completed || assignment.skipped ? 0.7 : 1,
 							}}
 						>
 							<button
+								type="button"
 								onClick={() => handleComplete(assignment._id)}
 								disabled={assignment.completed || assignment.skipped}
 								style={{
@@ -266,9 +253,7 @@ function TodayAssignments({
 									height: "24px",
 									borderRadius: "50%",
 									border: "2px solid var(--color-sage)",
-									background: assignment.completed
-										? "var(--color-sage)"
-										: "transparent",
+									background: assignment.completed ? "var(--color-sage)" : "transparent",
 									cursor: assignment.completed ? "default" : "pointer",
 									display: "flex",
 									alignItems: "center",
@@ -332,10 +317,7 @@ function QuickActions({
 					Manage Chores
 				</Link>
 
-				<button
-					onClick={() => setShowCode(!showCode)}
-					className="btn btn-soft"
-				>
+				<button type="button" onClick={() => setShowCode(!showCode)} className="btn btn-soft">
 					{showCode ? "Hide" : "Show"} Invite Code
 				</button>
 
@@ -378,6 +360,7 @@ function MembersCard({
 	members,
 }: {
 	members: Array<{
+		_id: string;
 		role: string;
 		user: { name: string; avatarUrl?: string } | null;
 	}>;
@@ -394,9 +377,9 @@ function MembersCard({
 					gap: "var(--spacing-sm)",
 				}}
 			>
-				{members.map((member, i) => (
+				{members.map((member) => (
 					<li
-						key={i}
+						key={member._id}
 						style={{
 							display: "flex",
 							alignItems: "center",
