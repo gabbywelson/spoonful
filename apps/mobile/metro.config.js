@@ -15,4 +15,7 @@ config.resolver.nodeModulesPaths = [
 	path.resolve(monorepoRoot, "node_modules"),
 ];
 
+// Enable package exports resolution for ESM packages like @t3-oss/env-core
+config.resolver.unstable_enablePackageExports = true;
+
 module.exports = config;
