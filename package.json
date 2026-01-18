@@ -1,7 +1,10 @@
 {
   "name": "spoonful",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "npm run dev -w @spoonful/web",
     "dev:convex": "npm run dev -w @spoonful/convex",
@@ -15,5 +18,8 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "expo": "^54.0.31"
   }
 }
