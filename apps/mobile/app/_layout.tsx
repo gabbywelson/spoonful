@@ -4,6 +4,7 @@ import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { ConvexReactClient } from "convex/react";
 import { useAuth } from "@clerk/clerk-expo";
 import * as SecureStore from "expo-secure-store";
+import { env } from "../lib/env";
 
 // Secure token cache for Clerk
 const tokenCache = {
@@ -23,19 +24,11 @@ const tokenCache = {
 	},
 };
 
-// Initialize Convex client
-const convex = new ConvexReactClient(
-	process.env.EXPO_PUBLIC_CONVEX_URL as string
-);
+// Initialize Convex client with validated env
+const convex = new ConvexReactClient(env.EXPO_PUBLIC_CONVEX_URL);
 
 export default function RootLayout() {
-	const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
-	if (!publishableKey) {
-		throw new Error(
-			"Missing EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY in your .env file"
-		);
-	}
+	const publishableKey = env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
 	return (
 		<ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
