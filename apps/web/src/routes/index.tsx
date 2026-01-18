@@ -1,8 +1,9 @@
-import { SignInButton, SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, UserButton, useUser } from "@clerk/clerk-react";
 import { api } from "@spoonful/convex/convex/_generated/api";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery } from "convex/react";
 import { useEffect } from "react";
+import { LandingPage } from "../components/LandingPage";
 
 export const Route = createFileRoute("/")({
 	component: HomePage,
@@ -10,91 +11,21 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
 	return (
-		<div className="container" style={{ paddingTop: "var(--spacing-2xl)" }}>
+		<div
+			style={{
+				paddingTop: "var(--spacing-2xl)",
+				// We remove container class for logged out user to allow full width sections
+				// But we'll add it back for logged in user via the dashboard
+			}}
+		>
 			<SignedOut>
 				<LandingPage />
 			</SignedOut>
 			<SignedIn>
-				<Dashboard />
+				<div className="container">
+					<Dashboard />
+				</div>
 			</SignedIn>
-		</div>
-	);
-}
-
-function LandingPage() {
-	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				alignItems: "center",
-				textAlign: "center",
-				gap: "var(--spacing-xl)",
-				maxWidth: "600px",
-				margin: "0 auto",
-			}}
-		>
-			<div>
-				<h1
-					style={{
-						fontSize: "3rem",
-						marginBottom: "var(--spacing-md)",
-						background:
-							"linear-gradient(135deg, var(--color-sage-dark), var(--color-lavender-dark))",
-						WebkitBackgroundClip: "text",
-						WebkitTextFillColor: "transparent",
-						backgroundClip: "text",
-					}}
-				>
-					Spoonful
-				</h1>
-				<p
-					style={{
-						fontSize: "1.25rem",
-						color: "var(--color-text-light)",
-						marginBottom: 0,
-					}}
-				>
-					Gentle chore management for real humans
-				</p>
-			</div>
-
-			<div
-				className="card"
-				style={{
-					padding: "var(--spacing-xl)",
-					width: "100%",
-				}}
-			>
-				<p style={{ marginBottom: "var(--spacing-lg)" }}>
-					Built with spoon theory in mind. Manage household chores in a way that respects your
-					energy, your limits, and your humanity.
-				</p>
-
-				<ul
-					style={{
-						textAlign: "left",
-						listStyle: "none",
-						display: "flex",
-						flexDirection: "column",
-						gap: "var(--spacing-sm)",
-						marginBottom: "var(--spacing-xl)",
-					}}
-				>
-					<li>✨ Check in with your daily energy level</li>
-					<li>🥄 Rate how many "spoons" each chore costs you</li>
-					<li>⚖️ Fair distribution based on capacity</li>
-					<li>💚 Built for ADHD, chronic illness, and mental health</li>
-				</ul>
-
-				<SignInButton mode="modal">
-					<button type="button" className="btn btn-primary" style={{ width: "100%" }}>
-						Get Started
-					</button>
-				</SignInButton>
-			</div>
-
-			<p className="encouragement">"You're doing your best, and that's more than enough."</p>
 		</div>
 	);
 }

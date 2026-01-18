@@ -23,7 +23,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@spoonful/convex/*": ["../../packages/convex/*"]
+      "@spoonful/convex/*": ["../../packages/convex/*"],
+      "@assets/*": ["../../assets/*"]
     }
   }
 }

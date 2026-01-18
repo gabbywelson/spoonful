@@ -13,6 +13,7 @@ const config = defineConfig({
 		alias: {
 			"@": fileURLToPath(new URL("./src", import.meta.url)),
 			"@spoonful/convex": fileURLToPath(new URL("../../packages/convex", import.meta.url)),
+			"@assets": fileURLToPath(new URL("../../assets", import.meta.url)),
 		},
 	},
 	plugins: [
