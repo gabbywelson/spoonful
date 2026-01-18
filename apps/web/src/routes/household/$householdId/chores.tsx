@@ -1,26 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@spoonful/convex/convex/_generated/api";
 import type { Id } from "@spoonful/convex/convex/_generated/dataModel";
 import { useState } from "react";
 
 export const Route = createFileRoute("/household/$householdId/chores")({
-	component: ChoresPage,
+	component: ChoresManagement,
 });
-
-function ChoresPage() {
-	return (
-		<>
-			<SignedOut>
-				<RedirectToSignIn />
-			</SignedOut>
-			<SignedIn>
-				<ChoresManagement />
-			</SignedIn>
-		</>
-	);
-}
 
 function ChoresManagement() {
 	const { householdId } = Route.useParams();
@@ -31,28 +17,14 @@ function ChoresManagement() {
 
 	if (chores === undefined) {
 		return (
-			<div className="container" style={{ paddingTop: "var(--spacing-2xl)" }}>
-				<div className="loading">
-					<div className="spinner" />
-				</div>
+			<div className="loading">
+				<div className="spinner" />
 			</div>
 		);
 	}
 
 	return (
-		<div className="container" style={{ paddingTop: "var(--spacing-2xl)" }}>
-			<Link
-				to="/household/$householdId"
-				params={{ householdId }}
-				style={{
-					display: "inline-block",
-					marginBottom: "var(--spacing-lg)",
-					color: "var(--color-text-muted)",
-				}}
-			>
-				← Back to Household
-			</Link>
-
+		<>
 			<header
 				style={{
 					display: "flex",
@@ -105,7 +77,7 @@ function ChoresManagement() {
 					))}
 				</div>
 			)}
-		</div>
+		</>
 	);
 }
 
@@ -321,10 +293,7 @@ function ChoreCard({
 	}[chore.frequencyType];
 
 	return (
-		<div
-			className="card"
-			style={{ opacity: chore.isActive ? 1 : 0.6 }}
-		>
+		<div className="card" style={{ opacity: chore.isActive ? 1 : 0.6 }}>
 			<div
 				style={{
 					display: "flex",
@@ -402,9 +371,7 @@ function ChoreCard({
 				</button>
 				<button
 					onClick={() => {
-						if (
-							confirm(`Are you sure you want to delete "${chore.name}"?`)
-						) {
+						if (confirm(`Are you sure you want to delete "${chore.name}"?`)) {
 							deleteChore({ choreId: chore._id });
 						}
 					}}
@@ -463,8 +430,7 @@ function PreferenceEditor({
 			await setPreference({
 				choreId,
 				householdId,
-				personalSpoonCost:
-					personalSpoonCost ?? undefined,
+				personalSpoonCost: personalSpoonCost ?? undefined,
 				willingnessLevel,
 			});
 		} finally {

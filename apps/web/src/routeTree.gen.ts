@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as HouseholdNewRouteImport } from './routes/household/new'
 import { Route as HouseholdJoinRouteImport } from './routes/household/join'
 import { Route as HouseholdHouseholdIdRouteImport } from './routes/household/$householdId'
+import { Route as HouseholdHouseholdIdIndexRouteImport } from './routes/household/$householdId/index'
 import { Route as HouseholdHouseholdIdChoresRouteImport } from './routes/household/$householdId/chores'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,12 @@ const HouseholdHouseholdIdRoute = HouseholdHouseholdIdRouteImport.update({
   path: '/household/$householdId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HouseholdHouseholdIdIndexRoute =
+  HouseholdHouseholdIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => HouseholdHouseholdIdRoute,
+  } as any)
 const HouseholdHouseholdIdChoresRoute =
   HouseholdHouseholdIdChoresRouteImport.update({
     id: '/chores',
@@ -48,13 +55,14 @@ export interface FileRoutesByFullPath {
   '/household/join': typeof HouseholdJoinRoute
   '/household/new': typeof HouseholdNewRoute
   '/household/$householdId/chores': typeof HouseholdHouseholdIdChoresRoute
+  '/household/$householdId/': typeof HouseholdHouseholdIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/household/$householdId': typeof HouseholdHouseholdIdRouteWithChildren
   '/household/join': typeof HouseholdJoinRoute
   '/household/new': typeof HouseholdNewRoute
   '/household/$householdId/chores': typeof HouseholdHouseholdIdChoresRoute
+  '/household/$householdId': typeof HouseholdHouseholdIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -63,6 +71,7 @@ export interface FileRoutesById {
   '/household/join': typeof HouseholdJoinRoute
   '/household/new': typeof HouseholdNewRoute
   '/household/$householdId/chores': typeof HouseholdHouseholdIdChoresRoute
+  '/household/$householdId/': typeof HouseholdHouseholdIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -72,13 +81,14 @@ export interface FileRouteTypes {
     | '/household/join'
     | '/household/new'
     | '/household/$householdId/chores'
+    | '/household/$householdId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/household/$householdId'
     | '/household/join'
     | '/household/new'
     | '/household/$householdId/chores'
+    | '/household/$householdId'
   id:
     | '__root__'
     | '/'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/household/join'
     | '/household/new'
     | '/household/$householdId/chores'
+    | '/household/$householdId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -125,6 +136,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HouseholdHouseholdIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/household/$householdId/': {
+      id: '/household/$householdId/'
+      path: '/'
+      fullPath: '/household/$householdId/'
+      preLoaderRoute: typeof HouseholdHouseholdIdIndexRouteImport
+      parentRoute: typeof HouseholdHouseholdIdRoute
+    }
     '/household/$householdId/chores': {
       id: '/household/$householdId/chores'
       path: '/chores'
@@ -137,10 +155,12 @@ declare module '@tanstack/react-router' {
 
 interface HouseholdHouseholdIdRouteChildren {
   HouseholdHouseholdIdChoresRoute: typeof HouseholdHouseholdIdChoresRoute
+  HouseholdHouseholdIdIndexRoute: typeof HouseholdHouseholdIdIndexRoute
 }
 
 const HouseholdHouseholdIdRouteChildren: HouseholdHouseholdIdRouteChildren = {
   HouseholdHouseholdIdChoresRoute: HouseholdHouseholdIdChoresRoute,
+  HouseholdHouseholdIdIndexRoute: HouseholdHouseholdIdIndexRoute,
 }
 
 const HouseholdHouseholdIdRouteWithChildren =
