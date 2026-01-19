@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignUpRouteImport } from './routes/sign-up'
+import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HouseholdNewRouteImport } from './routes/household/new'
 import { Route as HouseholdJoinRouteImport } from './routes/household/join'
@@ -16,6 +18,16 @@ import { Route as HouseholdHouseholdIdRouteImport } from './routes/household/$ho
 import { Route as HouseholdHouseholdIdIndexRouteImport } from './routes/household/$householdId/index'
 import { Route as HouseholdHouseholdIdChoresRouteImport } from './routes/household/$householdId/chores'
 
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -51,6 +63,8 @@ const HouseholdHouseholdIdChoresRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/household/$householdId': typeof HouseholdHouseholdIdRouteWithChildren
   '/household/join': typeof HouseholdJoinRoute
   '/household/new': typeof HouseholdNewRoute
@@ -59,6 +73,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/household/join': typeof HouseholdJoinRoute
   '/household/new': typeof HouseholdNewRoute
   '/household/$householdId/chores': typeof HouseholdHouseholdIdChoresRoute
@@ -67,6 +83,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
   '/household/$householdId': typeof HouseholdHouseholdIdRouteWithChildren
   '/household/join': typeof HouseholdJoinRoute
   '/household/new': typeof HouseholdNewRoute
@@ -77,6 +95,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/sign-in'
+    | '/sign-up'
     | '/household/$householdId'
     | '/household/join'
     | '/household/new'
@@ -85,6 +105,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/sign-in'
+    | '/sign-up'
     | '/household/join'
     | '/household/new'
     | '/household/$householdId/chores'
@@ -92,6 +114,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/sign-in'
+    | '/sign-up'
     | '/household/$householdId'
     | '/household/join'
     | '/household/new'
@@ -101,6 +125,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SignInRoute: typeof SignInRoute
+  SignUpRoute: typeof SignUpRoute
   HouseholdHouseholdIdRoute: typeof HouseholdHouseholdIdRouteWithChildren
   HouseholdJoinRoute: typeof HouseholdJoinRoute
   HouseholdNewRoute: typeof HouseholdNewRoute
@@ -108,6 +134,20 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -168,6 +208,8 @@ const HouseholdHouseholdIdRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SignInRoute: SignInRoute,
+  SignUpRoute: SignUpRoute,
   HouseholdHouseholdIdRoute: HouseholdHouseholdIdRouteWithChildren,
   HouseholdJoinRoute: HouseholdJoinRoute,
   HouseholdNewRoute: HouseholdNewRoute,

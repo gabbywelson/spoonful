@@ -7,7 +7,14 @@ export default function AppClerkProvider({
 	children: React.ReactNode;
 }) {
 	return (
-		<ClerkProvider publishableKey={env.VITE_CLERK_PUBLISHABLE_KEY} afterSignOutUrl="/">
+		<ClerkProvider
+			publishableKey={env.VITE_CLERK_PUBLISHABLE_KEY}
+			afterSignOutUrl="/"
+			signInUrl="/sign-in"
+			signUpUrl="/sign-up"
+			signInForceRedirectUrl="/"
+			signUpForceRedirectUrl="/"
+		>
 			{children}
 		</ClerkProvider>
 	);
