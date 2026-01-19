@@ -31,6 +31,9 @@
     "vite-tsconfig-paths": "^6.0.2",
     "zod": "^4.1.11"
   },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "*"
+  },
   "overrides": {
     "react": "19.0.0",
     "react-dom": "19.0.0"
