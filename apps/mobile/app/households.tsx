@@ -19,8 +19,8 @@ const colors = {
 };
 
 export default function HouseholdsScreen() {
-	const { signOut } = useAuth();
-	const households = useQuery(api.households.list);
+	const { signOut, isSignedIn } = useAuth();
+	const households = useQuery(api.households.list, isSignedIn ? undefined : "skip");
 
 	return (
 		<View style={styles.container}>
