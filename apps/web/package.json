@@ -32,7 +32,8 @@
     "zod": "^4.1.11"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "*"
+    "@rollup/rollup-linux-x64-gnu": "*",
+    "@esbuild/linux-x64": "*"
   },
   "overrides": {
     "react": "19.0.0",
