@@ -27,7 +27,7 @@ spoonful/
 ├── packages/
 │   └── convex/           # Shared Convex backend (database + functions)
 ├── biome.json            # Shared linting/formatting config
-└── package.json          # Monorepo root with npm workspaces
+└── package.json          # Monorepo root with pnpm workspaces
 ```
 
 ### Data Flow
@@ -57,13 +57,13 @@ flowchart TB
 
 | Layer | Technology |
 |-------|------------|
-| **Monorepo** | npm workspaces |
+| **Monorepo** | pnpm workspaces |
 | **Web App** | TanStack Start (Vite-based), React 19, Tailwind CSS |
 | **Mobile App** | Expo with expo-router, React Native |
 | **Backend** | Convex (serverless database + functions) |
 | **Auth** | Clerk (integrated with Convex) |
 | **Linting/Formatting** | Biome |
-| **Runtime** | Bun (preferred) or npm |
+| **Runtime** | pnpm |
 
 ---
 
@@ -192,23 +192,23 @@ CSS variables design system with soft pastel palette:
 
 ```bash
 # Install dependencies
-bun install
+pnpm install
 
 # Start Convex dev server (terminal 1)
-bun run dev:convex
+pnpm run dev:convex
 
 # Start web app (terminal 2)
-bun run dev
+pnpm run dev
 
 # Start mobile app
-bun run dev:mobile
+pnpm run dev:mobile
 
 # Linting
-bun run lint           # Check
-bun run lint:fix       # Auto-fix
+pnpm run lint           # Check
+pnpm run lint:fix       # Auto-fix
 
 # Formatting
-bun run format
+pnpm run format
 ```
 
 ---
@@ -240,7 +240,7 @@ EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 - **Line width**: 100 characters
 - **Import organization**: Auto-sorted
 
-Run `bun run lint:fix` to auto-format.
+Run `pnpm run lint:fix` to auto-format.
 
 ---
 

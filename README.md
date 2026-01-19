@@ -19,7 +19,7 @@ Based on "spoon theory" - the idea that people have a limited number of "spoons"
 - **Mobile**: React Native (Expo)
 - **Backend**: Convex
 - **Auth**: Clerk
-- **Runtime**: Bun
+- **Runtime**: pnpm
 - **Linting/Formatting**: Biome
 
 ## Project Structure
@@ -38,7 +38,7 @@ spoonful/
 
 ### Prerequisites
 
-- [Bun](https://bun.sh/) installed
+- [pnpm](https://pnpm.io/) installed
 - [Convex](https://convex.dev/) account
 - [Clerk](https://clerk.com/) account
 
@@ -46,13 +46,13 @@ spoonful/
 
 ```bash
 # Install dependencies
-bun install
+pnpm install
 
 # Start Convex dev server (in one terminal)
-bun run dev:convex
+pnpm run dev:convex
 
 # Start web app (in another terminal)
-bun run dev
+pnpm run dev
 ```
 
 ### Environment Variables
@@ -69,13 +69,13 @@ VITE_CLERK_PUBLISHABLE_KEY=your_clerk_key
 
 ```bash
 # Run linting
-bun run lint
+pnpm run lint
 
 # Fix linting issues
-bun run lint:fix
+pnpm run lint:fix
 
 # Format code
-bun run format
+pnpm run format
 ```
 
 ## License
